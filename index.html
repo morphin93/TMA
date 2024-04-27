@@ -10,7 +10,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body, html {
-            min-height: 100hv;
+            height: 100%;
             margin: 0;
             font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, Verdana, sans-serif;
             color-scheme: var(--tg-color-scheme);
@@ -40,13 +40,13 @@
         <div id="upperPart">
             <!-- Upper part content goes here -->
         </div>
-        <div id="interactionMenu">
-            <!-- Interaction menu content -->
-            <button @click="fetchData">teste</button>
-            <p>{{coinData}}</p>
-        </div>
+ 
     </div>
 
+    <script src="comp/interactionMenu.js"></script>
+
+
+    
     <script>
         new Vue({
             el: '#app',
