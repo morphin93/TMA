@@ -49,6 +49,7 @@
             <a href="https://ton.org/"><img width="48" src="./assets/tapps.png" alt="logo of telegram web apps"></a>
         </div>
         <h1>V0.00002</h1>
+        <p>{{coinData}}</p>
         <button @click="fetchData">Fetch Coin Data</button>
         <div v-if="showModal" class="modal" @click="showModal = false">
             <div class="modal-content" @click.stop>
