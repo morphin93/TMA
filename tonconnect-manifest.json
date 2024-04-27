@@ -1,0 +1,11 @@
+{
+    "name": "TMA Teste",
+    "short_name": "TMA Teste",
+    "description": "This is a test application for Telegram Mini Apps showcasing the TonConnect integration.",
+    "url": "https://t.me/tmatestebot/tmaTesteDev",
+    "logo": "https://t.me/tmatestebot/tmaTesteDev/logo.png",
+    "defaultLanguage": "en",
+    "background_color": "#FFFFFF",
+    "theme_color": "#000000"
+  }
+  
