@@ -2,7 +2,7 @@
 Vue.component('interaction-menu', {
     template: `
         <div id="interactionMenu">
-            <button @click="fetchData">Teste</button>
+            <button @click="fetchData">Teste2</button>
             <p>{{ coinData }}</p>
         </div>
     `,
