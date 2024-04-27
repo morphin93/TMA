@@ -67,10 +67,10 @@
             },
             methods: {
                 fetchData() {
-                    Telegram.WebApp.sendData('Fetching data...'); // Example use of Telegram WebApp
                     axios.get('https://client-api-2-74b1891ee9f9.herokuapp.com/coins?offset=0&limit=1&sort=created_timestamp&order=DESC&includeNsfw=true')
                         .then(response => {
-                            this.coinData = response.data[0]; // Assuming data is an array
+                            console.log(response.data); // Log pour voir la structure des données
+                            this.coinData = response.data[0]; // S'assurer que les données sont un tableau et accéder au premier élément
                             this.showModal = true;
                         })
                         .catch(error => {
@@ -78,6 +78,7 @@
                             Telegram.WebApp.sendData('Error fetching data');
                         });
                 },
+
                 closeModal() {
                     this.showModal = false;
                 }
