@@ -1,125 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>TMA TESTE</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Call with Modal Display</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         body {
-            --bg-color: var(--tg-theme-bg-color);
-            font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--tg-theme-text-color);
-            margin: 48px 24px;
-            padding: 0;
-            color-scheme: var(--tg-color-scheme);
+            font-family: Arial, sans-serif;
+            margin: 20px;
         }
-
-        a {
-            color: var(--tg-theme-link-color);
-        }
-        #viewport {
-            position: fixed;
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
             left: 0;
-            right: 0;
             top: 0;
-            height: var(--tg-viewport-stable-height, 100vh);
-            pointer-events: none;
-            transition: all .2s ease;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
         }
-        #viewport:after {
-            content: '';
-            display: block;
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            border-width: 4px;
-            border-style: solid;
-            border-image: linear-gradient(45deg, rgba(64, 224, 208, .5), rgba(173, 255, 47, .5)) 1;
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <div id="app">
-        <main>
-            <div align="center">
-                <a href="https://ton.org/"><img width="48" src="./assets/tapps.png" alt="logo of telegram web apps"></a>
+        <button @click="fetchData">Fetch Coin Data</button>
+        <div v-if="showModal" class="modal">
+            <div class="modal-content">
+                <span @click="showModal = false" class="close">&times;</span>
+                <p><strong>Name:</strong> {{ coinData.name }}</p>
+                <p><strong>Description:</strong> {{ coinData.description }}</p>
+                <p><strong>Website:</strong> <a :href="coinData.website" target="_blank">{{ coinData.website }}</a></p>
             </div>
-            <h1>Modals</h1>
-            <button v-on:click="showAlert">Launch TRY Alert</button>
-            <button v-on:click="showPopup">Launch Popup</button>
-
-            <h1>Links</h1>
-            <ul>
-                <li>
-                    <a href="javascript:void(0)" v-on:click="openTelegramLink">Open link within Telegram</a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)" v-on:click="openExternalLink">Open link in external browser</a>
-                </li>
-            </ul>
-
-            <h1>Buttons</h1>
-            <button v-on:click="expandWebview">Expand Webview</button>
-            <button v-on:click="toggleMainButton">Toggle Main Button</button>
-        </main>
+        </div>
     </div>
 
     <script>
         new Vue({
             el: '#app',
-            methods: {
-                showAlert() {
-                    Telegram.WebApp.showAlert('Hello World!');
-                },
-                showPopup() {
-                    Telegram.WebApp.showPopup({
-                        title: 'Title',
-                        message: 'Some message',
-                        buttons: [
-                            {id: 'link', type: 'default', text: 'Open ton.org'},
-                            {type: 'cancel'},
-                        ]
-                    }, function(btn) {
-                        if (btn === 'link') {
-                            Telegram.WebApp.openLink('https://ton.org/');
-                        }
-                    });
-                },
-                openTelegramLink() {
-                    Telegram.WebApp.openTelegramLink('https://t.me/trendingapps');
-                },
-                openExternalLink() {
-                    Telegram.WebApp.openLink('https://ton.org/');
-                },
-                expandWebview() {
-                    Telegram.WebApp.expand();
-                },
-                toggleMainButton() {
-                    if (Telegram.WebApp.MainButton.isVisible) {
-                        Telegram.WebApp.MainButton.hide();
-                    } else {
-                        Telegram.WebApp.MainButton.show();
-                    }
-                }
+            data: {
+                showModal: false,
+                coinData: {}
             },
-            mounted() {
-                Telegram.WebApp.ready();
-                Telegram.WebApp.onEvent('themeChanged', () => {
-                    document.documentElement.className = Telegram.WebApp.colorScheme;
-                    document.body.style.backgroundColor = Telegram.WebApp.backgroundColor;
-                });
+            methods: {
+                fetchData() {
+                    axios.get('https://client-api-2-74b1891ee9f9.herokuapp.com/coins?offset=0&limit=1&sort=created_timestamp&order=DESC&includeNsfw=true')
+                        .then(response => {
+                            this.coinData = response.data[0]; // Assuming data is an array
+                            this.showModal = true;
+                        })
+                        .catch(error => {
+                            console.error('There was an error!', error);
+                        });
+                }
             }
         });
     </script>
-
-    <!-- Eruda is console for mobile browsers -->
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
 </body>
 </html>
