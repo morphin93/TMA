@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title>TMA TESTE</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -40,31 +40,13 @@
         <div id="upperPart">
             <!-- Upper part content goes here -->
         </div>
- 
+        <interaction-menu></interaction-menu>
     </div>
 
     <script src="comp/interactionMenu.js"></script>
-
-
-    
     <script>
         new Vue({
             el: '#app',
-            data: {
-               coinData: '',
-            },
-            methods: {
-                fetchData() {
-                    axios.get('url')
-                        .then(response => {
-                            this.coinData = response.data[0];
-                        })
-                        .catch(error => {
-                            console.error('Error fetching data:', error);
-                            Telegram.WebApp.sendData('Error fetching data');
-                        });
-                }
-            },
             mounted() {
                 Telegram.WebApp.ready();
             }
