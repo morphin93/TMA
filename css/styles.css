@@ -9,6 +9,8 @@ body, html {
     flex-direction: column;
     max-width: 420px;
     max-height: 578px;
+    margin-left: auto;
+    margin-right: auto;
 }
 #upperPart {
     background-color: #000000;
