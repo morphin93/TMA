@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Call with Modal Display</title>
+    <title>TMA API Modal Example</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -49,7 +50,7 @@
         <button @click="fetchData">Fetch Coin Data</button>
         <div v-if="showModal" class="modal">
             <div class="modal-content">
-                <span @click="showModal = false" class="close">&times;</span>
+                <span @click="closeModal" class="close">&times;</span>
                 <p><strong>Name:</strong> {{ coinData.name }}</p>
                 <p><strong>Description:</strong> {{ coinData.description }}</p>
                 <p><strong>Website:</strong> <a :href="coinData.website" target="_blank">{{ coinData.website }}</a></p>
@@ -66,15 +67,23 @@
             },
             methods: {
                 fetchData() {
+                    Telegram.WebApp.sendData('Fetching data...'); // Example use of Telegram WebApp
                     axios.get('https://client-api-2-74b1891ee9f9.herokuapp.com/coins?offset=0&limit=1&sort=created_timestamp&order=DESC&includeNsfw=true')
                         .then(response => {
                             this.coinData = response.data[0]; // Assuming data is an array
                             this.showModal = true;
                         })
                         .catch(error => {
-                            console.error('There was an error!', error);
+                            console.error('Error fetching data:', error);
+                            Telegram.WebApp.sendData('Error fetching data');
                         });
+                },
+                closeModal() {
+                    this.showModal = false;
                 }
+            },
+            mounted() {
+                Telegram.WebApp.ready();
             }
         });
     </script>
