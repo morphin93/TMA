@@ -4,8 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <title>TMA TESTE</title>
-    <link rel="stylesheet" href="css/styles.css"> 
+    <title>TMA Test</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -23,6 +24,33 @@
             el: '#app',
             mounted() {
                 Telegram.WebApp.ready();
+                this.initializeTonConnect();
+            },
+            methods: {
+                initializeTonConnect() {
+                    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+                        manifestUrl: 'https://t.me/tmatestebot/tmaTesteDev/tonconnect-manifest.json',
+                        buttonRootId: 'connect-button-anchor'
+                    });
+
+                    // Set return strategy specifically for Telegram Mini Apps
+                    tonConnectUI.uiOptions = {
+                        actionsConfiguration: {
+                            returnStrategy: 'https://t.me/tmatestebot'
+                        }
+                    };
+
+                    // Subscribe to connection status changes
+                    const unsubscribe = tonConnectUI.onStatusChange((walletInfo) => {
+                        console.log('Wallet connection status changed:', walletInfo);
+                        // Here you can update your app state based on the wallet info
+                    });
+
+                    // Cleanup on component destruction
+                    this.$once('hook:beforeDestroy', () => {
+                        unsubscribe();
+                    });
+                }
             }
         });
     </script>
