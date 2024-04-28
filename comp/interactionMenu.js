@@ -4,7 +4,7 @@ Vue.component('interaction-menu', {
         <div id="interactionMenu">
             <button @click="fetchData">Teste2</button>
             <p>{{ coinData }}</p>
-            <div id="connect-button-anchor"></div>
+           
         </div>
     `,
     data() {
