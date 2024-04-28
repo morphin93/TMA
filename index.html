@@ -34,13 +34,11 @@
                         manifestUrl: 'https://shad0w.space/TON/tonconnect-manifest.json',
                         buttonRootId: 'connect-button-anchor'
                     });
-
-                    // Set return strategy specifically for Telegram Mini Apps
+                    
                     tonConnectUI.uiOptions = {
-                        actionsConfiguration: {
-                            returnStrategy: 'https://t.me/tmatestebot'
-                        }
+                            twaReturnUrl: 'https://t.me/tmatestebot'
                     };
+      
 
                     // Subscribe to connection status changes
                     const unsubscribe = tonConnectUI.onStatusChange((walletInfo) => {
