@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
     <title>Telegram Mini Apps Vanilla JS Sample App</title>
     <style>
         body {
@@ -87,6 +88,8 @@
         <h1>Buttons</h1>
         <button onclick="Telegram.WebApp.expand();">Expand Webview</button>
         <button onclick="toggleMainButton();">Toggle Main Button</button>
+
+        <button onclick="connect();">Se connecter avec TonConnect</button>
     </main>
     <div id="viewport"></div>
     <div id="viewport-params-size"></div>
@@ -135,24 +138,20 @@
             }
         };
 
-        function setViewportData() {
-            var sizeEl = document.getElementById('viewport-params-size');
-            sizeEl.innerText = 'width: ' + window.innerWidth + ' x ' + 
-                'height: ' + Telegram.WebApp.viewportStableHeight;
-
-            var expandEl = document.querySelector('#viewport-params-expand');
-            expandEl.innerText = 'Is Expanded: ' + (Telegram.WebApp.isExpanded ? 'true' : 'false');
-        }
-
-        Telegram.WebApp.setHeaderColor('secondary_bg_color');
-
-        setViewportData();
-        Telegram.WebApp.onEvent('viewportChanged', setViewportData);
-
-        Telegram.WebApp.onEvent('themeChanged', function() {
-            document.body.setAttribute('style', '--bg-color:' + Telegram.WebApp.backgroundColor);
+        // Init TonConnect UI
+        const tonConnectUI = new TonConnectUI({
+            manifestUrl: 'https://shad0w.space/TON/tonconnect-manifest.json',
+            twaReturnUrl: 'https://t.me/tmatestebot'
         });
 
+        // Function to connect with TonConnect
+        function connect() {
+            tonConnectUI.connect().then(() => {
+                console.log('User connected');
+            }).catch(error => {
+                console.error('Connection error:', error);
+            });
+        }
     </script>
 
     <!-- Eruda is console for mobile browsers -->
